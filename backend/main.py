@@ -35,18 +35,49 @@ def root():
 
 @app.post("/verify")
 async def verify_article(request: ArticleRequest):
+    text = request.text.lower()
+
     print(f"\n--- New Request ---")
     print(f"Length: {len(request.text)} characters")
     print(f"Preview: {request.text[:100]}...")
+
+    verdicts = []
+
+    # Simple mock AI logic
+    if "india" in text:
+        verdicts.append({
+            "claim": "India related claim",
+            "verdict": "Likely True",
+            "confidence": "85%",
+            "explanation": "India is widely recognized as a democratic country."
+        })
+
+    if "moon" in text:
+        verdicts.append({
+            "claim": "Moon related claim",
+            "verdict": "Suspicious",
+            "confidence": "60%",
+            "explanation": "This claim requires scientific verification."
+        })
+
+    if len(verdicts) == 0:
+        verdicts.append({
+            "claim": "General statement",
+            "verdict": "Unverified",
+            "confidence": "50%",
+            "explanation": "No strong data found (mock AI response)."
+        })
+
+    credibility_score = 80 if "india" in text else 50
+
     return {
         "status": "success",
-        "message": "Article received",
+        "message": "AI analysis complete",
         "article_length": len(request.text),
-        "claims_found": 0,
-        "verdicts": [],
-        "credibility_score": 0
+        "claims_found": len(verdicts),
+        "verdicts": verdicts,
+        "credibility_score": credibility_score
     }
-
 # Test your Groq key here
 @app.get("/test-ai")
 async def test_ai():
