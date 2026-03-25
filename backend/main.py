@@ -3,6 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from dotenv import load_dotenv
 from pathlib import Path
+from agents.claim_extractor import extract_claims
+from agents.web_verifier import verify_claim
 import os
 
 # FIX: ensure .env loads correctly from backend folder
@@ -35,49 +37,75 @@ def root():
 
 @app.post("/verify")
 async def verify_article(request: ArticleRequest):
-    text = request.text.lower()
-
     print(f"\n--- New Request ---")
     print(f"Length: {len(request.text)} characters")
     print(f"Preview: {request.text[:100]}...")
 
-    verdicts = []
+    try:
+        # STEP 1: Extract claims
+        claims = extract_claims(request.text)
+        claims = claims[:5]
 
-    # Simple mock AI logic
-    if "india" in text:
-        verdicts.append({
-            "claim": "India related claim",
-            "verdict": "Likely True",
-            "confidence": "85%",
-            "explanation": "India is widely recognized as a democratic country."
-        })
+        # STEP 2: Verify claims
+        verdicts = []
+        for claim in claims:
+            try:
+                result = verify_claim(claim)
+                verdicts.append(result)
+            except Exception as e:
+                verdicts.append({
+                    "claim": claim,
+                    "verdict": "UNVERIFIED",
+                    "confidence": "LOW",
+                    "explanation": f"Verification failed: {str(e)}",
+                    "sources": []
+                })
 
-    if "moon" in text:
-        verdicts.append({
-            "claim": "Moon related claim",
-            "verdict": "Suspicious",
-            "confidence": "60%",
-            "explanation": "This claim requires scientific verification."
-        })
+        # STEP 3: Calculate score
+        verified = sum(1 for v in verdicts if v["verdict"] == "VERIFIED")
+        contradicted = sum(1 for v in verdicts if v["verdict"] == "CONTRADICTED")
 
-    if len(verdicts) == 0:
-        verdicts.append({
-            "claim": "General statement",
-            "verdict": "Unverified",
-            "confidence": "50%",
-            "explanation": "No strong data found (mock AI response)."
-        })
+        score = int((verified / len(verdicts)) * 100) if verdicts else 0
 
-    credibility_score = 80 if "india" in text else 50
+        return {
+            "status": "success",
+            "article_length": len(request.text),
+            "claims_found": len(claims),
+            "credibility_score": score,
+            "verified_count": verified,
+            "contradicted_count": contradicted,
+            "unverified_count": len(verdicts) - verified - contradicted,
+            "verdicts": verdicts
+        }
 
-    return {
-        "status": "success",
-        "message": "AI analysis complete",
-        "article_length": len(request.text),
-        "claims_found": len(verdicts),
-        "verdicts": verdicts,
-        "credibility_score": credibility_score
-    }
+    except Exception as e:
+        # 🔥 FALLBACK (YOUR DUMMY AI)
+        text = request.text.lower()
+
+        verdicts = []
+        if "india" in text:
+            verdicts.append({
+                "claim": "India related claim",
+                "verdict": "Likely True",
+                "confidence": "85%",
+                "explanation": "India is widely recognized as a democratic country."
+            })
+        else:
+            verdicts.append({
+                "claim": "General statement",
+                "verdict": "Unverified",
+                "confidence": "50%",
+                "explanation": "Mock fallback response."
+            })
+
+        return {
+            "status": "fallback",
+            "message": "Using dummy AI (no API key)",
+            "article_length": len(request.text),
+            "claims_found": len(verdicts),
+            "verdicts": verdicts,
+            "credibility_score": 70
+        }
 # Test your Groq key here
 @app.get("/test-ai")
 async def test_ai():
