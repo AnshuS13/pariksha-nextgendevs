@@ -2,58 +2,48 @@ from langchain_groq import ChatGroq
 from langchain_core.prompts import ChatPromptTemplate
 import os
 import json
+import re
 
-def extract_claims(article_text: str) -> list:
-    """
-    Takes a full article and returns a list of
-    individual verifiable factual claims.
-    """
-    
+def extract_claims(article_text: str):
+
     llm = ChatGroq(
         model="llama-3.1-8b-instant",
         api_key=os.getenv("GROQ_API_KEY"),
-        temperature=0  # 0 = consistent, not creative
+        temperature=0
     )
-    
+
     prompt = ChatPromptTemplate.from_messages([
-        ("system", """You are a professional fact-checker working for a newsroom.
-        
-Your job is to read a news article and extract every verifiable factual claim.
+        ("system", """You are a professional fact-checker.
 
-A verifiable factual claim is:
-- A specific statistic (e.g. "India has 21 crore demat accounts")
-- A named event (e.g. "The RBI raised rates in March 2025")
-- A quote attributed to a specific person
-- A specific date, number, or percentage
-- A cause-and-effect statement about real events
+Extract ONLY strong factual claims.
 
-Do NOT include:
-- Opinions or editorials
-- Future predictions
-- Vague general statements
+STRICT RULES:
+- Return ONLY a JSON array
+- No explanation
+- Max 5 claims
 
-Return ONLY a JSON array of strings. No explanation. No markdown. No extra text.
-Example output: ["Claim 1 here", "Claim 2 here", "Claim 3 here"]
+Example:
+["India GDP grew by 8.2%", "RBI raised repo rate"]
 """),
-        ("human", "Extract all verifiable factual claims from this article:\n\n{article}")
+        ("human", "{article}")
     ])
-    
-    chain = prompt | llm
-    response = chain.invoke({"article": article_text})
-    
-    # Clean the response and parse JSON
-    raw = response.content.strip()
-    
-    # Remove markdown code blocks if present
-    if raw.startswith("```"):
-        raw = raw.split("```")[1]
-        if raw.startswith("json"):
-            raw = raw[4:]
-    
+
+    res = (prompt | llm).invoke({"article": article_text})
+    raw = res.content.strip()
+
+    # Clean markdown
+    raw = re.sub(r'```json', '', raw)
+    raw = re.sub(r'```', '', raw)
+
+    # Extract JSON safely
+    start = raw.find("[")
+    end = raw.rfind("]") + 1
+
+    if start != -1 and end != -1:
+        raw = raw[start:end]
+
     try:
         claims = json.loads(raw)
-        return claims
-    except json.JSONDecodeError:
-        # If JSON parsing fails, split by newline as fallback
-        lines = [l.strip() for l in raw.split("\n") if l.strip()]
-        return lines
+        return [c.strip() for c in claims if len(c.strip()) > 25][:5]
+    except:
+        return []
