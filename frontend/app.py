@@ -89,7 +89,7 @@ with tab1:
                 with st.spinner("🤖 4 AI agents working in parallel..."):
                     try:
                         resp = requests.post(
-                            "https://pariksha-nextgendevs.onrender.com/verify,
+                            "https://pariksha-nextgendevs.onrender.com/verify",
                             json={"text": article_text},
                             timeout=180
                         )
