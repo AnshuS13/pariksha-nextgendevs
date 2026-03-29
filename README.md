@@ -1,6 +1,10 @@
 # 🧠 PARIKSHA AI  
 ### AI-Powered Newsroom Fact Verification System  
 
+## Live Demo
+- Try PARIKSHA here-  https://jhizrpnvqubw9rmh5r7yod.streamlit.app/
+- Backend API (Swagger Docs)- https://pariksha-nextgendevs.onrender.com/docs
+
 ---
 
 ## 🚨 Problem Statement
@@ -174,7 +178,8 @@ PARIKSHA directly addresses:
 ### 👤 Aashirwad  
 - Research and data sourcing  
 - Demo article curation  
-- System validation support  
+- System validation support
+- @Aashirwad-Prajapati
 
 ---
 
