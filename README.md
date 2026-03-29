@@ -166,7 +166,8 @@ PARIKSHA directly addresses:
 ### 👤 Aman  
 - Frontend development  
 - UI/UX design  
-- API integration with frontend  
+- API integration with frontend
+- @amanshub
 
 ---
 
