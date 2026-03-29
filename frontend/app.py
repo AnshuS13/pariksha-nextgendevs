@@ -232,10 +232,10 @@ with tab2:
         st.rerun()
 
     try:
-        hist = requests.get("http://localhost:8000/history", timeout=10)
+        hist = requests.get("https://pariksha-nextgendevs.onrender.com/history", timeout=30)
 
         if hist.status_code == 200:
-            records = hist.json().get("records", [])
+            records = hist.json().get("history", [])
 
             if not records:
                 st.info("No verifications yet.")
@@ -259,8 +259,8 @@ with tab2:
                             f"Bias: {r['bias_type']} | Source: {r.get('source_quality','N/A')}"
                         )
 
-    except:
-        st.error("Backend not connected.")
+    except Exception as e:
+        st.error(f"Error: {e}")
 
 # ---------- FOOTER ----------
 st.markdown("---")
