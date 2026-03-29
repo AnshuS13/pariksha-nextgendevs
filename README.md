@@ -1,151 +1,193 @@
-**PARIKSHA — AI-Powered Newsroom Fact Verification System**
+# 🧠 PARIKSHA AI  
+### AI-Powered Newsroom Fact Verification System  
 
 ---
 
-## 🎯 Problem Statement
+## 🚨 Problem Statement
 
-In today’s digital ecosystem, **news spreads faster than it can be verified**.
-Business journalism, in particular, deals with **data-heavy claims, financial statistics, and policy updates**, where even minor misinformation can lead to **serious economic and public impact**.
+In today’s fast-paced digital media landscape, misinformation spreads faster than it can be verified. Journalists and editors often face:
 
-Despite this:
+- Time-consuming manual fact-checking processes  
+- Difficulty verifying multiple claims within an article  
+- Lack of tools to detect bias and unreliable sources  
+- No structured audit trail for verification decisions  
 
-* Journalists **manually verify facts**, which is time-consuming
-* Readers **consume unverified content**, often trusting unreliable sources
-* There is **no real-time credibility scoring system** for news articles
-
-As highlighted in the *AI-Native News Experience* challenge, current news delivery is **static, non-interactive, and lacks intelligence** 
-
-👉 There is a need for an **AI-native layer that transforms raw articles into verified, explainable, and trustworthy insights**.
+This leads to:
+- Spread of fake or misleading news 
+- Reduced trust in journalism  
+- Increased editorial risk  
 
 ---
 
 ## 💡 Our Solution
 
-**PARIKSHA** is an **AI-powered multi-agent fact verification system** that transforms any news article into a **structured credibility report**.
+**PARIKSHA AI** is an intelligent newsroom assistant that automates the process of fact verification.
 
-Instead of just reading news, users can:
-
-✅ Extract factual claims automatically
-✅ Verify them using real-time web data
-✅ Understand source reliability
-✅ Detect bias and sensationalism
-✅ Get an overall credibility score
-
----
-
-## ⚙️ How It Works (Multi-Agent Pipeline)
-
-PARIKSHA follows a **modular AI-agent architecture**:
-
-### 🔹 1. Claim Extraction Agent
-
-* Uses LLM (Groq – Llama 3.1)
-* Breaks article into **verifiable factual claims**
+It:
+- Extracts key claims from articles  
+- Verifies them using real-time web sources  
+- Assigns a credibility score  
+- Detects bias and weak sources  
+- Maintains an audit log of all verifications  
 
 ---
 
-### 🔹 2. Verification Agent
+## 🎯 Hackathon Alignment
 
-* Uses **Tavily API** for real-time web search
-* Cross-checks claims across multiple sources
-* Classifies each claim as:
+This project aligns with the **ET Gen AI Hackathon problem statement** focused on:
 
-  * VERIFIED
-  * CONTRADICTED
-  * UNVERIFIED
+> Leveraging AI to improve newsroom workflows, enhance credibility, and combat misinformation.
 
----
-
-### 🔹 3. Source Integrity Analyzer
-
-* Detects:
-
-  * Weak sources
-  * Unnamed references
-  * Missing citations
-* Outputs **source quality report**
+PARIKSHA directly addresses:
+- Automated verification  
+- AI-assisted journalism  
+- Trust and transparency in media  
 
 ---
 
-### 🔹 4. Bias Detection Agent
+## ⚙️ How It Works (Flow)
 
-* Identifies:
+### 🔁 End-to-End Pipeline
 
-  * Emotional language
-  * Sensational claims
-  * One-sided framing
-* Outputs **bias score and explanation**
+1. **User Input**
+   - Journalist inputs an article
 
----
+2. **Claim Extraction**
+   - AI extracts key factual claims
 
-### 🔹 5. Scoring Engine
+3. **Verification Engine**
+   - Each claim is verified using web search + LLM reasoning
 
-* Aggregates all signals into:
+4. **Source Analysis**
+   - Detects:
+     - Weak sources  
+     - Unnamed references  
+     - Statistical inconsistencies  
 
-  * **Credibility Score (0–100)**
-  * **Credibility Label (High / Moderate / Low)**
+5. **Bias Detection**
+   - Identifies:
+     - Emotional language  
+     - Sensational tone  
+     - One-sided framing  
 
----
+6. **Scoring System**
+   - Generates:
+     - Credibility Score (0–100)  
+     - Label (HIGH / MODERATE / LOW)
 
-## 🧩 Key Features
-
-* 🧠 Multi-agent AI system (not single LLM call)
-* 🌐 Real-time verification using web search
-* 📊 Structured outputs (JSON → UI-ready)
-* ⚖️ Bias + source analysis (not just fact-checking)
-* ⚡ Fast API-based backend (FastAPI)
-* 🧪 Demo-ready interface (Streamlit)
-
----
-
-## 🏗️ Tech Stack
-
-* **Backend:** FastAPI
-* **LLM:** Groq (Llama 3.1)
-* **Search:** Tavily API
-* **Frontend:** Streamlit (React optional)
-* **Architecture:** Multi-agent pipeline
+7. **Audit Logging**
+   - Stores every verification for traceability
 
 ---
 
-## 📈 Impact & Innovation
-
-### 🚨 Why this stands out:
-
-Most solutions:
-❌ Just summarize news
-❌ Just classify fake/real
-
-PARIKSHA:
-✅ Breaks article into claims
-✅ Verifies each claim independently
-✅ Explains reasoning
-✅ Adds bias + source intelligence
+## 🔄 Architecture
+<img width="771" height="451" alt="image" src="https://github.com/user-attachments/assets/733512de-a79a-4b83-98a2-6db13823befd" />
 
 ---
 
-### 📊 Real-World Impact
+## 🧠 Key Features
 
-* ⏱️ **Reduces verification time** from hours → seconds
-* 📰 Helps journalists **validate articles before publishing**
-* 👥 Helps readers **make informed decisions**
-* 🏦 Useful for **financial/news platforms like ET Markets**
-
----
-
-## 🔥 Future Scope
-
-* Browser extension for live article verification
-* Integration with newsroom CMS systems
-* Portfolio-based personalized news credibility
-* Multilingual fact-checking
+- ✅ Multi-claim extraction  
+- ✅ Real-time verification using web sources  
+- ✅ Credibility scoring system  
+- ✅ Source integrity analysis  
+- ✅ Bias detection engine  
+- ✅ Audit logging (`/history` endpoint)  
+- ✅ Structured, explainable outputs  
 
 ---
 
-## 🏁 Conclusion
+## 🆚 How It’s Different from Existing Tools
 
-PARIKSHA reimagines news consumption by adding an **AI-powered verification layer**, making journalism:
+### Existing Tools (e.g., Bloomberg, Fact-check platforms)
 
-👉 More **transparent**
-👉 More **trustworthy**
-👉 More **intelligent**
+- Mostly manual workflows  
+- Focus on post-publication verification  
+- Limited bias detection  
+- No unified scoring system  
+- No transparent audit trail  
+
+---
+
+### 🚀 PARIKSHA AI Advantage
+
+|          Feature          | Traditional Tools | PARIKSHA |
+|-------------|-------------|---------|---------|----|-----|
+| Claim-level verification  |        ❌         |   ✅    |
+| Real-time AI reasoning    |        ❌         |   ✅    |
+| Bias detection            |        ❌         |   ✅    |
+| Credibility scoring       |        ❌         |   ✅    |
+| Audit logging             |        ❌         |   ✅    |
+| Automation                |      Partial      |   Full   |
+
+---
+
+## 🛠️ Tech Stack
+
+### Backend
+- FastAPI  
+- Python  
+
+### AI & APIs
+- Groq LLM (Claim extraction & reasoning)  
+- Tavily API (Web search)  
+
+### Data & Storage
+- SQLite (Audit logging)  
+
+### Frontend
+- Streamlit  
+
+### Tools
+- Git & GitHub  
+- VS Code  
+
+---
+
+## 📊 Impact
+
+- ⏱️ Reduces verification time by ~95%  
+- 💰 Cuts operational costs for newsrooms  
+- 📉 Reduces misinformation risk  
+- 📈 Improves editorial decision-making  
+- 🏛️ Enables auditability and transparency  
+
+---
+
+## 👥 Team — NextGenDevs
+
+### 👤 Anshu Singh  
+- Backend development  
+- API design and integration  
+- Verification pipeline orchestration  
+- @AnshuS13
+---
+
+### 👤 Aman  
+- Frontend development  
+- UI/UX design  
+- API integration with frontend  
+
+---
+
+### 👤 Aashirwad  
+- Research and data sourcing  
+- Demo article curation  
+- System validation support  
+
+---
+
+## 🚀 Future Scope
+
+- Integration with newsroom CMS  
+- Real-time news feed verification  
+- Multilingual support  
+- Advanced contradiction detection  
+- Explainable AI dashboards  
+
+---
+
+## 🧠 Final Thought
+
+> PARIKSHA AI is not just a verification tool —  
+> it is a step towards responsible, transparent, and AI-assisted journalism.  
